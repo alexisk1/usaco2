@@ -88,6 +88,24 @@ bool check_adjacent(vector<coord*> a, vector<coord*> b){
   }
   return false;
 }
+bool find_wall(vector<coord*> a, vector<coord*> b){
+  vector<coord*> adj;
+  vector<int> adj_dir;
+  for(int i=0; i<a.size();i++){
+     for(int t=0; t<b.size();t++){
+        if(a[i]->y==b[t]->y){
+           if(a[i]->x==b[t]->x-1){
+           }else if(a[i]->x==b[t]->x+1) {
+           }
+        }else if(a[i]->x==b[t]->x){
+              if(a[i]->y==b[t]->y-1 ){
+              }else if(a[i]->y==b[t]->y+1){
+              }
+        }
+     }
+  }
+  return false;
+}
 int main() {
 
    ofs.open ("castle.out");
@@ -184,14 +202,16 @@ cout<<"\n  ";
                 }
             }
    }
-   int max=0;
+    max=0;
    for(int i=0;i<rooms.size();i++){
        if(rooms[i].size()>max){
-     
+          max = rooms[i].size(); 
        }
    }
+    
    ofs<<rooms.size()<<"\n";
-   ofs<<
+   ofs<<max<<"\n";
+   ofs <<adjacent[maxi][maxj]<<"\n";
    return 0;
 }
 
