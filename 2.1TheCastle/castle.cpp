@@ -15,8 +15,8 @@ std::ifstream ifs;
 std::ofstream ofs;
 using namespace std;
 struct coord{
-  int x,y;
-  coord(int x, int y):x(x),y(y){
+  unsigned char x,y;
+  coord( unsigned char x,  unsigned char y):x(x),y(y){
   }
 };
 
@@ -88,23 +88,73 @@ bool check_adjacent(vector<coord*> a, vector<coord*> b){
   }
   return false;
 }
+//N 0
+//S 1
+//W 2
+//E 3
 bool find_wall(vector<coord*> a, vector<coord*> b){
   vector<coord*> adj;
-  vector<int> adj_dir;
+  vector< unsigned char> adj_dir;
+/*cout<<"\n a ";
+        for (int r=0; r< a.size(); r++){
+            cout<<"  "<< a[r]->x<<" "<< a[r]->y<<" "<<"\n";
+        }
+
+cout<<"\n  b";
+
+        for (int r=0; r< b.size(); r++){
+            cout<<"  "<< b[r]->x<<" "<< b[r]->y<<" "<<"\n";
+        }
+cout<<"\n  ";*/
   for(int i=0; i<a.size();i++){
      for(int t=0; t<b.size();t++){
         if(a[i]->y==b[t]->y){
            if(a[i]->x==b[t]->x-1){
+                adj.push_back(new coord(a[i]->x,a[i]->y));
+                adj_dir.push_back(3);
            }else if(a[i]->x==b[t]->x+1) {
+                adj.push_back(new coord(b[t]->x,b[t]->y));
+                adj_dir.push_back(3);
            }
         }else if(a[i]->x==b[t]->x){
               if(a[i]->y==b[t]->y-1 ){
+                 adj.push_back(new coord(b[t]->x,b[t]->y));
+                 adj_dir.push_back(0);
               }else if(a[i]->y==b[t]->y+1){
+                 adj.push_back(new coord(a[i]->x,a[i]->y));
+                 adj_dir.push_back(0);
               }
         }
      }
   }
-  return false;
+/*cout<<"\n  ";
+
+        for (int r=0; r<adj.size(); r++){
+            cout<<"  "<<adj[r]->x<<" "<<adj[r]->y<<" "<<adj_dir[r]<<"\n";
+        }
+cout<<"\n  ";*/
+  int pos =0;
+  int west=adj[0]->x;
+  int south=adj[0]->y;
+  for(int i=1; i<adj.size();i++){
+     if(adj[i]->x<west){
+        pos =i;
+        west=adj[i]->x;
+        south=adj[i]->y;
+     }else if(adj[i]->x==west){
+         if(adj[i]->y>south){
+                pos =i;
+                west=adj[i]->x;
+                south=adj[i]->y;
+         }
+     }
+  }
+  ofs<<south+1 <<" "<<west+1<<" ";
+  if(adj_dir[pos]==0){
+      ofs<<"N\n";
+  }else{
+      ofs<<"E\n";
+  }
 }
 int main() {
 
@@ -129,6 +179,7 @@ int main() {
 		}
 	}
    int p;
+    cout<<"AAA\n";
    for(int y=0; y<N;y++){
 		for(int x=0; x<M;x++){
             ifs>>p;
@@ -153,9 +204,9 @@ int main() {
             castle[x][y]=new point(N,S,W,E);
         }
    }
-
+    cout<<"BBB\n";
   vector< vector<coord*> > rooms;
-
+    cout<<"CCC\n";
   for(int y=0; y<N;y++){
 		for(int x=0; x<M;x++){
            	if(visited[x][y]!=true){
@@ -169,20 +220,24 @@ int main() {
            	}
         }
    }
-   int** adjacent;
-   adjacent = new int* [rooms.size()];
-   for (int i=0; i < rooms.size(); i++)
-         adjacent[i] = new int[rooms.size()];
+    cout<<"DDD\n";
+   delete visited;
+   delete castle;
 
+    int** adjacent;
+   adjacent = new  int* [rooms.size()];
+   for (int i=0; i < rooms.size(); i++)
+         adjacent[i] = new  int[rooms.size()];
+    cout<<"EEE\n";
 //  cout<<"DONE!!!\n";
-cout<<"\n  ";
+/*cout<<"\n  ";
    for(int i=0; i<rooms.size(); i++){
         for (int r=0; r<rooms[i].size(); r++){
             cout<<"  "<<rooms[i][r]->x<<" "<<rooms[i][r]->y;
         }
 cout<<"\n  ";
-   }
-
+   }*/
+   
    int max=0;
    int maxi=0;
    int maxj=0;
@@ -197,7 +252,7 @@ cout<<"\n  ";
                            maxi=i;
                            maxj=j;
                        }
-                      cout<<" "<<i <<" "<<j<< "  == "<< adjacent[i][j] << "\n";
+               //        cout<<" "<<i <<" "<<j<< "  == "<< adjacent[i][j] << "\n";
                     }
                 }
             }
@@ -208,10 +263,11 @@ cout<<"\n  ";
           max = rooms[i].size(); 
        }
    }
-    
+
    ofs<<rooms.size()<<"\n";
    ofs<<max<<"\n";
    ofs <<adjacent[maxi][maxj]<<"\n";
+   find_wall(rooms[maxi],rooms[maxj]);
    return 0;
 }
 
