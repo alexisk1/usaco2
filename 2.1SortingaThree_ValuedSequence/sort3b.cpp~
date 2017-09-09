@@ -1,0 +1,48 @@
+/*
+ID: alexisk2
+PROG: sort3
+LANG: C++11
+*/
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>    // std::sort
+
+#include <string>
+
+
+std::ifstream ifs;
+std::ofstream ofs;
+
+
+using namespace std;
+
+
+int main() {
+
+   ofs.open ("sort3.out");
+   ifs.open ("sort3.in");
+   int n;
+   ifs>>n;
+   int k;
+   vector <int> num;
+   int no_1=0;
+   int no_2=0;
+   int no_3=0;
+   for ( int i = 0; i < n ; i++ ){
+         ifs>>k;
+         num.push_back(k);
+         if(k==1) no_1++;  
+         if(k==2) no_2++; 
+         if(k==3) no_3++;                   
+   }
+
+   int changes = 0;
+   sort_next(num,num.size()-1, &changes);
+  // cout<<"after\n"; 
+  
+//   for(int i=0; i<num.size();i++) cout<<"\n"<<num[i]<<"\n";
+   ofs<<changes<<"\n";
+}
+
