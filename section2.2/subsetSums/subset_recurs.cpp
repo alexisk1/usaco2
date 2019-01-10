@@ -28,6 +28,19 @@ void recurs_sets2(int sum, int max_used, int& max_sum, int &total_sol, int& N)
      }
 }
 
+void recurs_sets3(int sum, int max_used, int& max_sum, int &total_sol, int& N)
+{
+     if(sum == 0){
+        total_sol++;
+        return;
+     }if ( (max_sum<<1) - sum > max_used*(max_used-1)/2 ){
+        return;
+     }else{
+           recurs_sets3(sum-max_used, max_used-1, max_sum, total_sol, N);
+
+           recurs_sets3(sum, max_used-1, max_sum, total_sol, N);
+     }
+}
 
 int main() {
 
